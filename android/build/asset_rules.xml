@@ -36,7 +36,7 @@
       <arg value="${asset.source.dir}"/>
       <arg value="-I"/>
       <arg value="${asset.source.dir}/javascripts"/>
-      <arg value="${asset.source.dir}/javascripts/application.js"/>
+      <arg value="${asset.source.dir}/javascripts/application.android.js"/>
     </exec>
     <if condition="${build.is.mode.release}">
       <then>

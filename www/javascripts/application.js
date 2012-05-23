@@ -1,4 +1,7 @@
-//= require lib/cordova-1.7.0
+//
+//  Main application manifest.
+//
+//
 //= require lib/zepto
-
-//= require ./init
+//
+//= require init
