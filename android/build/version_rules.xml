@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+     Rules for reading and monipulating project version.
+-->
+<project name="version_rules">
+
+  <!-- defined in ${sdk.dir}/tools/ant/build.xml
+  <taskdef name="xpath"
+           classname="com.android.ant.XPathTask"
+           classpathref="android.antlibs" />
+  -->
+
+  <target name="-pre-build">
+    <sequential>
+      <xpath input="AndroidManifest.xml"
+             output="version.name"
+             expression="/manifest/@android:versionName" />
+      <xpath input="AndroidManifest.xml"
+             output="version.code"
+             expression="/manifest/@android:versionCode" />
+      <property name="version.string" value="${version.name}-${version.code}-${build.target}" />
+    </sequential>
+  </target>
+
+  <target name="-post-build">
+    <copy file="${out.final.file}"
+          tofile="${out.absolute.dir}/${ant.project.name}-${version.string}.apk"
+          preservelastmodified="true"/>
+  </target>
+
+</project>

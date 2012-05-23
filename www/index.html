@@ -1,0 +1,65 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta name="viewport" content="width=320; user-scalable=no" />
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <title>Example</title>
+
+    <link rel="stylesheet" href="application.css" type="text/css" media="screen">
+
+    <script type="text/javascript" charset="utf-8" src="application.js"></script>
+    <script type="text/javascript" charset="utf-8">
+      //Bootstrap application
+      var ready = 0;
+      $(function() {
+        if (ready++) {
+          init($);
+        }
+      });
+      // Ensure native device resources are initialized
+      if (typeof cordova !== "undefined" && cordova !== null) {
+        var onDeviceReady = function() {
+          if (ready++) {
+            init($);
+          }
+        };
+        document.addEventListener('deviceready', onDeviceReady, false);
+      } else {
+        ready++;
+      }
+    </script>
+  </head>
+
+  <body>
+    <h1>Welcome to Cordova!</h1>
+    <h2>This file is located at www/index.html</h2>
+    <p class="centered">
+      <img src="images/icon.png" alt="icon">
+    </p>
+    <div class="infobox">
+      <em>Platform:</em> <span id="platform">&nbsp;</span>
+      <br>
+      <em>Device:</em> <span id="device">&nbsp;</span>
+      <br>
+      <em>Id:</em> <span id="uuid">&nbsp;</span>
+      <br>
+      <em>Width:</em> <span id="width">&nbsp;</span>,
+      <em>Height:</em> <span id="height">&nbsp;</span>,
+      <em>Color Depth:</em> <span id="colorDepth"></span>
+    </div>
+
+    <dl id="accel-data">
+      <dt>X:</dt><dd id="x">Off</dd>
+      <dt>Y:</dt><dd id="y">Off</dd>
+      <dt>Z:</dt><dd id="z">Off</dd>
+    </dl>
+    <a href="#" class="button" id="toggle-accel">Toggle Accelerometer</a>
+
+    <dl id="compass-data">
+      <dt>Compass Heading:</dt><dd id="h">Off</dd>
+    </dl>
+    <a href="#" class="button" id="toggle-compass">Toggle Compass</a>
+
+    <a href="#" class="button" id="vibrate">Vibrate</a>
+  </body>
+</html>

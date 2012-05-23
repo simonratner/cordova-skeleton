@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+     Rules for compiling web assets.
+
+     Dependencies:
+       $ gem install sprockets sass coffee-script
+       $ npm install -g uglify-js
+
+    (or ensure otherwise that `sprockets` and `uglifyjs` are in your path.)
+-->
+<project name="asset_rules">
+
+  <target name="clean-assets">
+    <delete dir="${asset.absolute.dir}" includeEmptyDirs="true"/>
+  </target>
+
+  <target name="copy-assets">
+    <echo>Copying static assets to ${asset.absolute.dir}/www...</echo>
+    <mkdir dir="${asset.absolute.dir}/www" />
+    <copy todir="${asset.absolute.dir}/www" includeEmptyDirs="false">
+      <fileset dir="${asset.source.dir}">
+        <exclude name="**/*.coffee"/>
+        <exclude name="**/*.js"/>
+        <exclude name="**/*.css"/>
+        <exclude name="**/*.sass"/>
+        <exclude name="**/*.scss"/>
+      </fileset>
+    </copy>
+  </target>
+
+  <target name="make-scripts">
+    <echo>Compiling scripts...</echo>
+    <exec executable="sprockets" vmlauncher="false" failonerror="true" logError="true"
+          output="${asset.absolute.dir}/www/application.js">
+      <arg value="-I"/>
+      <arg value="${asset.source.dir}"/>
+      <arg value="-I"/>
+      <arg value="${asset.source.dir}/javascripts"/>
+      <arg value="${asset.source.dir}/javascripts/application.js"/>
+    </exec>
+    <if condition="${build.is.mode.release}">
+      <then>
+        <echo>Compressing...</echo>
+        <property name="script.compression.args" value="--mangle-toplevel"/>
+      </then>
+      <else>
+        <property name="script.compression.args" value="--beautify"/>
+      </else>
+    </if>
+    <exec executable="uglifyjs" vmlauncher="false" failonerror="true" logError="true">
+      <arg line="${script.compression.args}"/>
+      <arg value="--no-copyright"/>
+      <arg value="--overwrite"/>
+      <arg value="--define"/>
+      <arg value="$version$='${version.string}'"/>
+      <arg value="${asset.absolute.dir}/www/application.js"/>
+    </exec>
+  </target>
+
+  <target name="make-styles">
+    <echo>Compiling styles...</echo>
+    <exec executable="sprockets" vmlauncher="false" failonerror="true" logError="true"
+          output="${asset.absolute.dir}/www/application.css">
+      <arg value="-I"/>
+      <arg value="${asset.source.dir}"/>
+      <arg value="-I"/>
+      <arg value="${asset.source.dir}/stylesheets"/>
+      <arg value="${asset.source.dir}/stylesheets/application.css"/>
+    </exec>
+    <!-- TODO: compress css output -->
+  </target>
+
+  <target name="-pre-clean" depends="clean-assets" />
+
+  <target name="-pre-compile" depends="copy-assets, make-scripts, make-styles" />
+
+</project>

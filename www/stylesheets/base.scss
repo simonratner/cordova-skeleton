@@ -1,0 +1,44 @@
+@mixin fullscreen {
+  overflow: hidden;
+  min-width: 100% !important;
+  min-height: 100% !important;
+}
+
+/* Body styling */
+
+body {
+  border-top: 1px solid #393939;
+  background-color: #222;
+  color: #666;
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 12px;
+  line-height: 1.5em;
+  padding-top: 3px;
+  margin: 0;
+}
+
+/* Content styling */
+
+h1 {
+  color: #eee;
+  font-size: 1.8em;
+  font-weight: bold;
+  text-align: center;
+  margin: .75em 0 0;
+  padding: 0;
+}
+
+h2 {
+  font-size: 1.2em;
+  text-align: center;
+  margin: .5em 0 0;
+  padding: 0;
+}
+
+p {
+  margin: 1em 0 0;
+}
+
+.centered {
+  text-align: center;
+}
