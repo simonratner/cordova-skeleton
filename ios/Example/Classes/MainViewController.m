@@ -137,4 +137,34 @@
 }
 */
 
+// Generate and store unique app id instead of using device id.
+// This overrides a Cordova method; check when upgrading Cordova. 
+- (NSDictionary*) deviceProperties
+{
+  // Read saved unique id.
+  NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+  NSString *uuid = [userDefaults stringForKey:@"UniqueId"];
+  if (uuid == nil) {
+    // First run, or preferences have been reset; generate a new uuid.
+    CFUUIDRef uuidRef = CFUUIDCreate(NULL);
+    uuid = (NSString*) CFUUIDCreateString(NULL, uuidRef);
+    CFRelease(uuidRef);
+    // Save uuid for future use.
+    [userDefaults setObject:uuid forKey:@"UniqueId"];
+    [userDefaults synchronize];
+    [uuid autorelease];
+  }
+  
+  UIDevice *device = [UIDevice currentDevice];
+  NSMutableDictionary *devProps = [NSMutableDictionary dictionaryWithCapacity:6];
+  [devProps setObject:[device systemName] forKey:@"platform"];
+  [devProps setObject:[device systemVersion] forKey:@"version"];
+  [devProps setObject:uuid forKey:@"uuid"];
+  [devProps setObject:[device model] forKey:@"name"];
+  [devProps setObject:[[self class] cordovaVersion] forKey:@"cordova"];
+  
+  NSDictionary *devReturn = [NSDictionary dictionaryWithDictionary:devProps];
+  return devReturn;
+}
+
 @end
